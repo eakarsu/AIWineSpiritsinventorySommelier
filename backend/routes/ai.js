@@ -300,4 +300,195 @@ router.post('/wine-education', auth, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// Helper: 503 when OpenRouter key is missing
+function aiKeyMissing() {
+  const k = process.env.OPENROUTER_API_KEY;
+  return !k || k === 'your_openrouter_api_key_here';
+}
+
+// AI Predictive Purchase Recommendations
+// Body: { occasion?, budget?, party_size?, food_pairing?, preferences?, region_focus?, vintage_focus?, exclude? }
+// Pulls the user's tasting_journal + recent inventory and suggests new wines to buy.
+router.post('/predictive-purchase', auth, async (req, res) => {
+  try {
+    if (aiKeyMissing()) {
+      return res.status(503).json({ error: 'AI not configured: OPENROUTER_API_KEY is missing' });
+    }
+    const {
+      occasion,
+      budget,
+      party_size,
+      food_pairing,
+      preferences,
+      region_focus,
+      vintage_focus,
+      exclude
+    } = req.body || {};
+
+    // Build grounding from the user's recent tasting history & inventory
+    let journal = [];
+    let inventory = [];
+    try {
+      const j = await pool.query(
+        'SELECT wine_name, occasion, personal_rating, would_buy_again, taste_notes, aroma_notes, mood, price_paid FROM tasting_journal ORDER BY tasting_date DESC NULLS LAST LIMIT 20'
+      );
+      journal = j.rows;
+    } catch (_e) {}
+    try {
+      const inv = await pool.query(
+        'SELECT name, type, category, region, country, vintage, producer, current_value FROM inventory ORDER BY date_added DESC NULLS LAST LIMIT 25'
+      );
+      inventory = inv.rows;
+    } catch (_e) {}
+
+    const journalSummary = journal.length
+      ? journal.map(r => `- ${r.wine_name} (rating=${r.personal_rating || 'n/a'}, would_buy_again=${r.would_buy_again ? 'yes' : 'no'}, occasion=${r.occasion || 'n/a'}, paid=${r.price_paid || 'n/a'}, taste=${(r.taste_notes || '').slice(0, 120)})`).join('\n')
+      : 'No tasting journal entries yet.';
+    const inventorySummary = inventory.length
+      ? inventory.map(r => `- ${r.name} | ${r.type}/${r.category} | ${r.region || '-'}, ${r.country || '-'} | vintage ${r.vintage || 'NV'} | producer ${r.producer || '-'}`).join('\n')
+      : 'No inventory recorded.';
+
+    const systemPrompt = `You are a Master Sommelier and wine retail buyer. Generate predictive purchase recommendations based on the user's tasting history and current cellar. Return ONLY valid JSON in this shape:
+{
+  "summary": "<2-3 sentence overall recommendation>",
+  "recommendations": [
+    {
+      "wine_name": "<producer + cuvee>",
+      "type": "red|white|rose|sparkling|dessert|fortified|spirit",
+      "region": "...",
+      "country": "...",
+      "vintage_or_nv": "...",
+      "estimated_retail_price_usd": <number>,
+      "confidence": "low|medium|high",
+      "rationale": "<why it fits this user's profile>",
+      "pairing_idea": "...",
+      "alternative_if_unavailable": "..."
+    }
+  ],
+  "diversification_notes": "<gaps in current cellar to consider>"
+}
+Provide 5-7 recommendations.`;
+
+    const prompt = `Recommend wines/spirits to purchase next.
+
+Occasion: ${occasion || 'general restocking'}
+Budget per bottle: ${budget || 'flexible'}
+Party size: ${party_size || 'n/a'}
+Food pairing: ${food_pairing || 'n/a'}
+Stated preferences: ${preferences || 'none specified'}
+Region focus: ${region_focus || 'open'}
+Vintage focus: ${vintage_focus || 'open'}
+Exclude: ${exclude || 'none'}
+
+=== USER'S RECENT TASTING JOURNAL (${journal.length}) ===
+${journalSummary}
+
+=== CURRENT CELLAR (${inventory.length}) ===
+${inventorySummary}`;
+
+    const aiResponse = await callOpenRouter(prompt, systemPrompt);
+
+    // Best-effort JSON parse
+    let parsed = null;
+    try {
+      const cleaned = String(aiResponse || '')
+        .replace(/^```(?:json)?\s*/g, '')
+        .replace(/```\s*$/g, '')
+        .trim();
+      parsed = JSON.parse(cleaned);
+    } catch (_e) {}
+
+    res.json({
+      result: aiResponse,
+      parsed,
+      grounding: {
+        journal_count: journal.length,
+        inventory_count: inventory.length
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// AI Auction Price Prediction
+// Body: { wine_name, vintage?, producer?, region?, condition?, provenance?, recent_auction_prices? }
+// Returns a structured estimate (low/expected/high) with reasoning. Honest about
+// uncertainty when no auction data is provided.
+router.post('/auction-price-predict', auth, async (req, res) => {
+  try {
+    if (aiKeyMissing()) {
+      return res.status(503).json({ error: 'AI not configured: OPENROUTER_API_KEY is missing' });
+    }
+    const {
+      wine_name,
+      vintage,
+      producer,
+      region,
+      condition,
+      provenance,
+      recent_auction_prices
+    } = req.body || {};
+
+    if (!wine_name || !String(wine_name).trim()) {
+      return res.status(400).json({ error: 'wine_name is required' });
+    }
+
+    const systemPrompt = `You are a wine auction specialist. Predict a fine-wine auction hammer price for the supplied bottle. Return ONLY valid JSON:
+{
+  "wine": "...",
+  "vintage": "...",
+  "estimate": {
+    "low_usd": <number>,
+    "expected_usd": <number>,
+    "high_usd": <number>,
+    "currency": "USD"
+  },
+  "confidence": "low|medium|high",
+  "key_factors": ["..."],
+  "comparable_lots": [
+    { "lot_description": "...", "hammer_price_usd": <number>, "auction_house": "...", "year": <number> }
+  ],
+  "risks_and_caveats": ["..."],
+  "recommendation": "buy|hold|sell|undecided",
+  "reasoning": "<2-4 sentences>"
+}
+If you do not have reliable comparables, set confidence to "low" and clearly explain limitations in risks_and_caveats.`;
+
+    const recentPricesText = Array.isArray(recent_auction_prices) && recent_auction_prices.length > 0
+      ? recent_auction_prices.map((p, i) => `  ${i + 1}. ${typeof p === 'string' ? p : JSON.stringify(p)}`).join('\n')
+      : 'None provided.';
+
+    const prompt = `Predict auction price for:
+Wine: ${wine_name}
+Vintage: ${vintage || 'NV'}
+Producer: ${producer || 'unknown'}
+Region: ${region || 'unknown'}
+Condition: ${condition || 'unspecified'}
+Provenance: ${provenance || 'unspecified'}
+
+Recent auction comparables (user-supplied):
+${recentPricesText}`;
+
+    const aiResponse = await callOpenRouter(prompt, systemPrompt);
+
+    let parsed = null;
+    try {
+      const cleaned = String(aiResponse || '')
+        .replace(/^```(?:json)?\s*/g, '')
+        .replace(/```\s*$/g, '')
+        .trim();
+      parsed = JSON.parse(cleaned);
+    } catch (_e) {}
+
+    res.json({
+      result: aiResponse,
+      parsed,
+      input: { wine_name, vintage: vintage || null, producer: producer || null, region: region || null }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

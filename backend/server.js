@@ -43,11 +43,21 @@ app.use('/api/wine-clubs', require('./routes/wineClubs'));
 app.use('/api/reservations', require('./routes/reservations'));
 app.use('/api/maintenance-log', require('./routes/maintenanceLog'));
 
+// Apply pass 5 — backlog integrations (POS, distributors, sommelier cert)
+app.use('/api/integrations', require('./routes/integrations'));
+app.use('/api/custom', require('./routes/customFeatures'));
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// // === Batch 09 Gaps & Frontend Mounts ===
+app.use('/api/gap-ai-aiwinespiritsinventorysommelier', require('./routes/batch09GapAi')); // // === Batch 09 Gaps & Frontend Mounts ===
+app.use('/api/gap-nonai-aiwinespiritsinventorysommelier', require('./routes/batch09GapNonai')); // // === Batch 09 Gaps & Frontend Mounts ===
+
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
 });
+
+

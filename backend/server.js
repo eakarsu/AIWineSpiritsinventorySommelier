@@ -56,6 +56,9 @@ app.get('/api/health', (req, res) => {
 app.use('/api/gap-ai-aiwinespiritsinventorysommelier', require('./routes/batch09GapAi')); // // === Batch 09 Gaps & Frontend Mounts ===
 app.use('/api/gap-nonai-aiwinespiritsinventorysommelier', require('./routes/batch09GapNonai')); // // === Batch 09 Gaps & Frontend Mounts ===
 
+// === Custom Views (mounted before listen / 404) ===
+app.use('/api/custom-views', require('./routes/customViews'));
+
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
 });

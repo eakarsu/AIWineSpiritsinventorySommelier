@@ -3,6 +3,13 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 
+if (process.env.NODE_ENV === 'production' || process.env.ALLOW_DEMO_SEED !== 'true') {
+  throw new Error('Demo seed is disabled; set ALLOW_DEMO_SEED=true only for an isolated non-production database.');
+}
+const seedEmail = String(process.env.SEED_ADMIN_EMAIL || '').trim().toLowerCase();
+const seedPassword = String(process.env.SEED_ADMIN_PASSWORD || '');
+if (!seedEmail || seedPassword.length < 12) throw new Error('SEED_ADMIN_EMAIL and a 12+ character SEED_ADMIN_PASSWORD are required.');
+
 async function seed() {
   const client = await pool.connect();
   try {
@@ -12,12 +19,12 @@ async function seed() {
     console.log('Schema created successfully');
 
     // Seed user
-    const hashedPassword = await bcrypt.hash('admin123', 10);
+    const hashedPassword = await bcrypt.hash(seedPassword, 12);
     await client.query(`
       INSERT INTO users (email, password, name, role)
       VALUES ($1, $2, $3, $4)
       ON CONFLICT (email) DO NOTHING
-    `, ['admin@winesommelier.com', hashedPassword, 'Admin User', 'admin']);
+    `, [seedEmail, hashedPassword, 'Runtime Administrator', 'admin']);
     console.log('User seeded');
 
     // Seed Inventory (18 items)

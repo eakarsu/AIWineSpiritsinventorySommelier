@@ -1,15 +1,29 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 require('dotenv').config({ path: '../.env' });
+const authenticate = require('./middleware/auth');
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || 3001;
+const PORT = Number(process.env.BACKEND_PORT);
+if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) throw new Error('BACKEND_PORT must be an assigned TCP port.');
+const origins = String(process.env.ALLOWED_ORIGINS || '').split(',').map((value) => value.trim()).filter(Boolean);
+if (!origins.length || origins.includes('*')) throw new Error('ALLOWED_ORIGINS must be an explicit allowlist.');
 
-app.use(cors());
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+app.use(cors({ origin(origin, callback) {
+  if (!origin || origins.includes(origin)) return callback(null, true);
+  return callback(new Error('Origin is not allowed by CORS.'));
+}, credentials: true }));
 app.use(express.json());
 
-// Routes - Original 5
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api', authenticate);
+
+// Routes - Original 5
 app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/tasting-notes', require('./routes/tastingNotes'));
 app.use('/api/food-pairings', require('./routes/foodPairings'));
@@ -47,11 +61,6 @@ app.use('/api/maintenance-log', require('./routes/maintenanceLog'));
 app.use('/api/integrations', require('./routes/integrations'));
 app.use('/api/custom', require('./routes/customFeatures'));
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
 // // === Batch 09 Gaps & Frontend Mounts ===
 app.use('/api/gap-ai-aiwinespiritsinventorysommelier', require('./routes/batch09GapAi')); // // === Batch 09 Gaps & Frontend Mounts ===
 app.use('/api/gap-nonai-aiwinespiritsinventorysommelier', require('./routes/batch09GapNonai')); // // === Batch 09 Gaps & Frontend Mounts ===
@@ -59,8 +68,9 @@ app.use('/api/gap-nonai-aiwinespiritsinventorysommelier', require('./routes/batc
 // === Custom Views (mounted before listen / 404) ===
 app.use('/api/custom-views', require('./routes/customViews'));
 
-app.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
-});
-
+function start() {
+  return app.listen(PORT, () => console.log(`Backend server running on port ${PORT}`));
+}
+if (require.main === module) start();
+module.exports = { app, start };
 

@@ -4,8 +4,14 @@ const auth = require('../middleware/auth');
 const https = require('https');
 
 async function callOpenRouter(prompt, systemPrompt) {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5';
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  const model = process.env.OPENROUTER_MODEL?.trim();
+  const baseUrl = process.env.OPENROUTER_BASE_URL?.trim().replace(/\/$/, '');
+  if (!apiKey) throw new Error('OPENROUTER_API_KEY is required');
+  if (!model) throw new Error('OPENROUTER_MODEL is required');
+  if (baseUrl !== 'https://openrouter.ai/api/v1') {
+    throw new Error('OPENROUTER_BASE_URL must be https://openrouter.ai/api/v1');
+  }
 
   const body = JSON.stringify({
     model: model,
@@ -36,10 +42,15 @@ async function callOpenRouter(prompt, systemPrompt) {
       res.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          if (parsed.error) {
+          if (res.statusCode < 200 || res.statusCode >= 300 || parsed.error) {
             reject(new Error(parsed.error.message || 'OpenRouter API error'));
           } else {
-            resolve(parsed.choices[0].message.content);
+            const content = parsed.choices?.[0]?.message?.content;
+            if (typeof content !== 'string' || !content.trim()) {
+              reject(new Error('OpenRouter returned an empty response'));
+            } else {
+              resolve(content);
+            }
           }
         } catch (e) {
           reject(new Error('Failed to parse AI response'));

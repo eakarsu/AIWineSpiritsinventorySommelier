@@ -1,0 +1,906 @@
+{
+  "title": "Wine Spiritsinventory Sommelier",
+  "features": [
+    {
+      "id": "ai-tasting-note",
+      "endpoint": "/api/ai/tasting-note",
+      "title": "Tasting note",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "wine_name",
+          "type": "text",
+          "required": false,
+          "label": "Wine name",
+          "presets": [
+            "Willamette Valley Pinot Noir",
+            "Marlborough Sauvignon Blanc",
+            "Nonvintage Brut sparkling wine"
+          ],
+          "manual": false
+        },
+        {
+          "key": "type",
+          "type": "text",
+          "required": false,
+          "label": "Type",
+          "presets": [
+            "Red",
+            "White",
+            "Sparkling"
+          ],
+          "manual": false
+        },
+        {
+          "key": "category",
+          "type": "text",
+          "required": false,
+          "label": "Category",
+          "presets": [
+            "Still wine",
+            "Still wine",
+            "Brut"
+          ],
+          "manual": false
+        },
+        {
+          "key": "region",
+          "type": "text",
+          "required": false,
+          "label": "Region",
+          "presets": [
+            "Willamette Valley",
+            "Marlborough",
+            "Champagne"
+          ],
+          "manual": false
+        },
+        {
+          "key": "country",
+          "type": "text",
+          "required": false,
+          "label": "Country",
+          "presets": [
+            "United States",
+            "New Zealand",
+            "France"
+          ],
+          "manual": false
+        },
+        {
+          "key": "vintage",
+          "type": "text",
+          "required": false,
+          "label": "Vintage",
+          "presets": [
+            "2022",
+            "2023",
+            "NV"
+          ],
+          "manual": false
+        },
+        {
+          "key": "producer",
+          "type": "text",
+          "required": false,
+          "label": "Producer",
+          "presets": [
+            "Example estate winery",
+            "Example coastal winery",
+            "Example grower producer"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 68
+      }
+    },
+    {
+      "id": "ai-food-pairing",
+      "endpoint": "/api/ai/food-pairing",
+      "title": "Food pairing",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "wine_name",
+          "type": "text",
+          "required": false,
+          "label": "Wine name",
+          "presets": [
+            "Willamette Valley Pinot Noir",
+            "Marlborough Sauvignon Blanc",
+            "Brut sparkling wine"
+          ],
+          "manual": false
+        },
+        {
+          "key": "wine_type",
+          "type": "text",
+          "required": false,
+          "label": "Wine type",
+          "presets": [
+            "Red",
+            "White",
+            "Sparkling"
+          ],
+          "manual": false
+        },
+        {
+          "key": "category",
+          "type": "text",
+          "required": false,
+          "label": "Category",
+          "presets": [
+            "Still wine",
+            "Still wine",
+            "Brut"
+          ],
+          "manual": false
+        },
+        {
+          "key": "region",
+          "type": "text",
+          "required": false,
+          "label": "Region",
+          "presets": [
+            "Willamette Valley",
+            "Marlborough",
+            "Champagne"
+          ],
+          "manual": false
+        },
+        {
+          "key": "flavor_profile",
+          "type": "text",
+          "required": false,
+          "label": "Flavor profile",
+          "presets": [
+            "Bright cherry, gentle tannin, earthy finish",
+            "Citrus, fresh herbs, crisp acidity",
+            "Green apple, toast, dry finish"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 107
+      }
+    },
+    {
+      "id": "ai-price-optimization",
+      "endpoint": "/api/ai/price-optimization",
+      "title": "Price optimization",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "wine_name",
+          "type": "text",
+          "required": false,
+          "label": "Wine name",
+          "presets": [
+            "Willamette Valley Pinot Noir",
+            "Marlborough Sauvignon Blanc",
+            "Brut sparkling wine"
+          ],
+          "manual": false
+        },
+        {
+          "key": "current_price",
+          "type": "number",
+          "required": false,
+          "label": "Current price",
+          "presets": [
+            34,
+            22,
+            52
+          ],
+          "manual": false
+        },
+        {
+          "key": "cost_price",
+          "type": "text",
+          "required": false,
+          "label": "Cost price",
+          "presets": [
+            "21",
+            "13",
+            "34"
+          ],
+          "manual": false
+        },
+        {
+          "key": "wine_type",
+          "type": "text",
+          "required": false,
+          "label": "Wine type",
+          "presets": [
+            "Red",
+            "White",
+            "Sparkling"
+          ],
+          "manual": false
+        },
+        {
+          "key": "region",
+          "type": "text",
+          "required": false,
+          "label": "Region",
+          "presets": [
+            "Willamette Valley",
+            "Marlborough",
+            "Champagne"
+          ],
+          "manual": false
+        },
+        {
+          "key": "vintage",
+          "type": "text",
+          "required": false,
+          "label": "Vintage",
+          "presets": [
+            "2022",
+            "2023",
+            "NV"
+          ],
+          "manual": false
+        },
+        {
+          "key": "market_segment",
+          "type": "text",
+          "required": false,
+          "label": "Market segment",
+          "presets": [
+            "Midrange retail",
+            "Everyday retail",
+            "Premium retail"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 157
+      }
+    },
+    {
+      "id": "ai-vintage-valuation",
+      "endpoint": "/api/ai/vintage-valuation",
+      "title": "Vintage valuation",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "wine_name",
+          "type": "text",
+          "required": false,
+          "label": "Wine name",
+          "presets": [
+            "Willamette Valley Pinot Noir",
+            "Barolo",
+            "Napa Valley Cabernet Sauvignon"
+          ],
+          "manual": false
+        },
+        {
+          "key": "vintage",
+          "type": "text",
+          "required": false,
+          "label": "Vintage",
+          "presets": [
+            "2018",
+            "2016",
+            "2019"
+          ],
+          "manual": false
+        },
+        {
+          "key": "producer",
+          "type": "text",
+          "required": false,
+          "label": "Producer",
+          "presets": [
+            "Example estate winery",
+            "Example Piedmont producer",
+            "Example Napa winery"
+          ],
+          "manual": false
+        },
+        {
+          "key": "region",
+          "type": "text",
+          "required": false,
+          "label": "Region",
+          "presets": [
+            "Willamette Valley",
+            "Piedmont",
+            "Napa Valley"
+          ],
+          "manual": false
+        },
+        {
+          "key": "current_value",
+          "type": "number",
+          "required": false,
+          "label": "Current value",
+          "presets": [
+            65,
+            125,
+            110
+          ],
+          "manual": false
+        },
+        {
+          "key": "purchase_price",
+          "type": "text",
+          "required": false,
+          "label": "Purchase price",
+          "presets": [
+            "42",
+            "89",
+            "76"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 200
+      }
+    },
+    {
+      "id": "ai-cocktail-recipe",
+      "endpoint": "/api/ai/cocktail-recipe",
+      "title": "Cocktail recipe",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "spirit_name",
+          "type": "text",
+          "required": false,
+          "label": "Spirit name",
+          "presets": [
+            "London dry gin",
+            "Reposado tequila",
+            "Rye whiskey"
+          ],
+          "manual": false
+        },
+        {
+          "key": "spirit_type",
+          "type": "text",
+          "required": false,
+          "label": "Spirit type",
+          "presets": [
+            "Gin",
+            "Tequila",
+            "Whiskey"
+          ],
+          "manual": false
+        },
+        {
+          "key": "flavor_preferences",
+          "type": "text",
+          "required": false,
+          "label": "Flavor preferences",
+          "presets": [
+            "Citrus and herbal, dry finish",
+            "Bright lime and gentle spice",
+            "Bitter orange and warm spice"
+          ],
+          "manual": false
+        },
+        {
+          "key": "occasion",
+          "type": "text",
+          "required": false,
+          "label": "Occasion",
+          "presets": [
+            "Summer dinner",
+            "Weekend gathering",
+            "After dinner"
+          ],
+          "manual": false
+        },
+        {
+          "key": "difficulty",
+          "type": "text",
+          "required": false,
+          "label": "Difficulty",
+          "presets": [
+            "Easy",
+            "Intermediate",
+            "Intermediate"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 250
+      }
+    },
+    {
+      "id": "ai-sommelier-chat",
+      "endpoint": "/api/ai/sommelier-chat",
+      "title": "Sommelier chat",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "message",
+          "type": "text",
+          "required": false,
+          "label": "Message",
+          "presets": [
+            "What serving temperature suits a young Pinot Noir, and why?",
+            "Compare Sauvignon Blanc and Chardonnay for grilled fish.",
+            "How should I organize bottles approaching their drinking window?"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 261
+      }
+    },
+    {
+      "id": "ai-region-explorer",
+      "endpoint": "/api/ai/region-explorer",
+      "title": "Region explorer",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "region",
+          "type": "text",
+          "required": false,
+          "label": "Region",
+          "presets": [
+            "Willamette Valley",
+            "Marlborough",
+            "Piedmont"
+          ],
+          "manual": false
+        },
+        {
+          "key": "country",
+          "type": "text",
+          "required": false,
+          "label": "Country",
+          "presets": [
+            "United States",
+            "New Zealand",
+            "Italy"
+          ],
+          "manual": false
+        },
+        {
+          "key": "interest",
+          "type": "text",
+          "required": false,
+          "label": "Interest",
+          "presets": [
+            "Pinot Noir climate and subregions",
+            "Sauvignon Blanc styles and food pairings",
+            "Barolo appellations and Nebbiolo aging"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 271
+      }
+    },
+    {
+      "id": "ai-cellar-analysis",
+      "endpoint": "/api/ai/cellar-analysis",
+      "title": "Cellar analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "inventory_summary",
+          "type": "text",
+          "required": false,
+          "label": "Inventory summary",
+          "presets": [
+            "Illustrative cellar: 24 red, 12 white and 6 sparkling bottles; 8 reds are within their drinking window.",
+            "Illustrative cellar: 40 red and 15 white bottles; few ready to drink whites.",
+            "Illustrative cellar: 18 sparkling, 20 red and 20 white bottles across three racks."
+          ],
+          "manual": false
+        },
+        {
+          "key": "alert_summary",
+          "type": "text",
+          "required": false,
+          "label": "Alert summary",
+          "presets": [
+            "Illustrative alerts: 3 bottles near window end; 2 storage temperature checks due.",
+            "Illustrative alerts: 5 mature reds need review; no verified temperature incidents.",
+            "Illustrative alerts: 4 missing rack locations; 1 bottle has incomplete vintage data."
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 282
+      }
+    },
+    {
+      "id": "ai-sales-analysis",
+      "endpoint": "/api/ai/sales-analysis",
+      "title": "Sales analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "sales_summary",
+          "type": "text",
+          "required": false,
+          "label": "Sales summary",
+          "presets": [
+            "Illustrative month: 86 wine bottles sold, led by red blends.",
+            "Illustrative quarter: 340 bottles sold; sparkling grew during events.",
+            "Illustrative season: 520 bottles sold; white wines led summer volume."
+          ],
+          "manual": false
+        },
+        {
+          "key": "revenue",
+          "type": "number",
+          "required": false,
+          "label": "Revenue",
+          "presets": [
+            2460,
+            11200,
+            17400
+          ],
+          "manual": false
+        },
+        {
+          "key": "top_sellers",
+          "type": "text",
+          "required": false,
+          "label": "Top sellers",
+          "presets": [
+            "Red blend: 24 bottles; Sauvignon Blanc: 18 bottles",
+            "Brut sparkling: 72 bottles; Pinot Noir: 58 bottles",
+            "Sauvignon Blanc: 110 bottles; ros\u00e9: 92 bottles"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 293
+      }
+    },
+    {
+      "id": "ai-wine-education",
+      "endpoint": "/api/ai/wine-education",
+      "title": "Wine education",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "topic",
+          "type": "text",
+          "required": false,
+          "label": "Topic",
+          "presets": [
+            "How acidity, tannin and body affect food pairing",
+            "How to read a Burgundy wine label",
+            "How traditional method sparkling wine is made"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 304
+      }
+    },
+    {
+      "id": "ai-predictive-purchase",
+      "endpoint": "/api/ai/predictive-purchase",
+      "title": "Predictive purchase",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "occasion",
+          "type": "text",
+          "required": false,
+          "label": "Occasion",
+          "presets": [
+            "Small dinner party",
+            "Holiday reception",
+            "Cellar replenishment"
+          ],
+          "manual": false
+        },
+        {
+          "key": "budget",
+          "type": "number",
+          "required": false,
+          "label": "Budget",
+          "presets": [
+            35,
+            55,
+            80
+          ],
+          "manual": false
+        },
+        {
+          "key": "party_size",
+          "type": "text",
+          "required": false,
+          "label": "Party size",
+          "presets": [
+            "6",
+            "16",
+            "4"
+          ],
+          "manual": false
+        },
+        {
+          "key": "food_pairing",
+          "type": "text",
+          "required": false,
+          "label": "Food pairing",
+          "presets": [
+            "Roast chicken",
+            "Seafood appetizers",
+            "Grilled lamb"
+          ],
+          "manual": false
+        },
+        {
+          "key": "preferences",
+          "type": "text",
+          "required": false,
+          "label": "Preferences",
+          "presets": [
+            "Medium body, bright acidity",
+            "Dry sparkling and crisp whites",
+            "Structured reds suitable for aging"
+          ],
+          "manual": false
+        },
+        {
+          "key": "region_focus",
+          "type": "text",
+          "required": false,
+          "label": "Region focus",
+          "presets": [
+            "Willamette Valley",
+            "Open to several regions",
+            "Piedmont and Rioja"
+          ],
+          "manual": false
+        },
+        {
+          "key": "vintage_focus",
+          "type": "text",
+          "required": false,
+          "label": "Vintage focus",
+          "presets": [
+            "Recent vintages",
+            "Nonvintage acceptable",
+            "2018\u20132021"
+          ],
+          "manual": false
+        },
+        {
+          "key": "exclude",
+          "type": "text",
+          "required": false,
+          "label": "Exclude",
+          "presets": [
+            "Sweet wines",
+            "High oak influence",
+            "Ready to drink only"
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 323
+      }
+    },
+    {
+      "id": "ai-auction-price-predict",
+      "endpoint": "/api/ai/auction-price-predict",
+      "title": "Auction price predict",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "wine_name",
+          "type": "text",
+          "required": true,
+          "label": "Wine name",
+          "presets": [
+            "Barolo",
+            "Napa Valley Cabernet Sauvignon",
+            "Vintage Champagne"
+          ],
+          "manual": false
+        },
+        {
+          "key": "vintage",
+          "type": "text",
+          "required": false,
+          "label": "Vintage",
+          "presets": [
+            "2016",
+            "2019",
+            "2012"
+          ],
+          "manual": false
+        },
+        {
+          "key": "producer",
+          "type": "text",
+          "required": false,
+          "label": "Producer",
+          "presets": [
+            "Example Piedmont producer",
+            "Example Napa winery",
+            "Example Champagne house"
+          ],
+          "manual": false
+        },
+        {
+          "key": "region",
+          "type": "text",
+          "required": false,
+          "label": "Region",
+          "presets": [
+            "Piedmont",
+            "Napa Valley",
+            "Champagne"
+          ],
+          "manual": false
+        },
+        {
+          "key": "condition",
+          "type": "text",
+          "required": false,
+          "label": "Condition",
+          "presets": [
+            "Sealed bottle; level and label reported sound",
+            "Sealed bottle; minor label wear",
+            "Sealed bottle; storage history unverified"
+          ],
+          "manual": false
+        },
+        {
+          "key": "provenance",
+          "type": "text",
+          "required": false,
+          "label": "Provenance",
+          "presets": [
+            "Illustrative private cellar; documentation must be verified",
+            "Illustrative retail purchase; receipt unavailable",
+            "Illustrative seller description; authenticate before bidding"
+          ],
+          "manual": false
+        },
+        {
+          "key": "recent_auction_prices",
+          "type": "json",
+          "required": false,
+          "label": "Recent auction prices",
+          "presets": [
+            [
+              {
+                "sale_price_usd": 110,
+                "year": 2024,
+                "source": "Illustrative example; replace with verified sale data"
+              },
+              {
+                "sale_price_usd": 125,
+                "year": 2025,
+                "source": "Illustrative example; replace with verified sale data"
+              }
+            ],
+            [
+              {
+                "sale_price_usd": 90,
+                "year": 2024,
+                "source": "Illustrative example; replace with verified sale data"
+              },
+              {
+                "sale_price_usd": 105,
+                "year": 2025,
+                "source": "Illustrative example; replace with verified sale data"
+              }
+            ],
+            [
+              {
+                "sale_price_usd": 150,
+                "year": 2024,
+                "source": "Illustrative example; replace with verified sale data"
+              },
+              {
+                "sale_price_usd": 165,
+                "year": 2025,
+                "source": "Illustrative example; replace with verified sale data"
+              }
+            ]
+          ],
+          "manual": false,
+          "description": "Illustrative comparables only; replace with verified sale records before relying on an estimate."
+        }
+      ],
+      "source": {
+        "file": "backend/routes/ai.js",
+        "line": 429
+      }
+    }
+  ],
+  "resources": [
+    {
+      "key": "inventory",
+      "endpoint": "/api/inventory",
+      "label": "Inventory",
+      "fields": [
+        "name",
+        "type",
+        "category",
+        "region",
+        "country",
+        "vintage",
+        "producer",
+        "alcohol_pct",
+        "quantity",
+        "bottle_size",
+        "purchase_price",
+        "current_value",
+        "location",
+        "rack_position",
+        "drink_window_start",
+        "drink_window_end",
+        "notes"
+      ],
+      "updateFields": [
+        "name",
+        "type",
+        "category",
+        "region",
+        "country",
+        "vintage",
+        "producer",
+        "alcohol_pct",
+        "quantity",
+        "bottle_size",
+        "purchase_price",
+        "current_value",
+        "location",
+        "rack_position",
+        "drink_window_start",
+        "drink_window_end",
+        "notes"
+      ],
+      "delete": true,
+      "source": "backend/routes/inventory.js"
+    },
+    {
+      "key": "ai_tasting_notes",
+      "endpoint": "/api/tasting-notes",
+      "label": "Tasting notes",
+      "fields": [],
+      "resultField": "ai_tasting_note",
+      "aiOnly": false
+    },
+    {
+      "key": "ai_food_pairings",
+      "endpoint": "/api/food-pairings",
+      "label": "Food pairings",
+      "fields": [],
+      "resultField": "ai_suggestions",
+      "aiOnly": false
+    }
+  ]
+}

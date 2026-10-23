@@ -1,4 +1,5 @@
 import NativeWorkflowStudio from './NativeWorkflowStudio';
+import TasksFeaturePack from './TasksFeaturePack';
 import nativeWorkflowConfig from './nativeWorkflowConfig.json';
 import WorkflowSidebar from './WorkflowSidebar';
 import { useEffect, useState } from 'react';
@@ -62,6 +63,6 @@ export default function App() {
           ))}
         </div>
       </section>
-    <NativeWorkflowStudio config={nativeWorkflowConfig} request={authenticatedNativeRequest} /></main></div>
+    <TasksFeaturePack /><NativeWorkflowStudio config={nativeWorkflowConfig} request={authenticatedNativeRequest} /></main></div>
   );
 }

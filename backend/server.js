@@ -22,6 +22,7 @@ app.get('/api/health', (_req, res) => {
 });
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api', authenticate);
+app.use('/api', require('./routes/featurePack'));
 
 // Routes - Original 5
 app.use('/api/inventory', require('./routes/inventory'));
